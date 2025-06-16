@@ -8,14 +8,8 @@
 float lat = 53.348511319754834;
 float lon = 7.062443737385131;
 SolarPosition knock(lat,lon);
-/*  WLAN Tilli
-const char* ssid = "WLAN-421077";
-const char* password = "2869707528700678";
-*/
 
-// Wlan stube:
-const char* ssid = "TP-Link_4DD8";
-const char* password = "90650147";
+
 
 // Zeitzone für Deutschland (Berlin): UTC+2 im Sommer, UTC+1 im Winter
 const char* ntpServer = "pool.ntp.org";
@@ -25,25 +19,14 @@ WiFiUDP ntpUDP;
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 0, 60000);
 
 
-String sunTime(int time) {
-  String result;
-  int hour = time / 60;
-  int minute = time % 60;
-  if (hour < 10) result += "0";
-  result = (String)hour + ":";
-  if (minute < 10) result += "0";
-  result += (String)minute;
-  return result;
-}
-
-time_t getTime(){
+time_t getTime(){   // time-methode SolarPosition
   timeClient.update();
   return timeClient.getEpochTime();
 }
 
 void setup() {
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
+  WiFi.begin(ssid, password);   
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println("Verbindung zum WLAN...");
@@ -66,9 +49,9 @@ void loop() {
 
 
   Serial.print("Azimuth: ");
-  Serial.println(knock.getSolarAzimuth());
+  Serial.println(knock.getSolarAzimuth());  // Winkel zu Norden ( north = 0 / east = 90 / south = 180 / west = 270)
   Serial.print("Altitude: ");
-  Serial.println(knock.getSolarElevation());
+  Serial.println(knock.getSolarElevation());  // Winkel zum Boden / Höhe der Sonne
   Serial.println();
   delay(1000);
 }
